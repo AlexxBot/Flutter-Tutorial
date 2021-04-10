@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   print('se ejecuto el main');
@@ -11,8 +12,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      //theme: ThemeData.dark(),
+      theme: ThemeData.light(),
       title: 'Flutter Demo',
-      home: HomeStateful(),
+      home: Widgets(),
     );
   }
 }
@@ -21,33 +24,125 @@ class MyApp extends StatelessWidget {
 class HomeStateless extends StatelessWidget {
   //todo lo que este aqui se define una vez, porque es el contructor
   final String title;
-  HomeStateless({this.title = "valor inicial"});
+  final double valorAltura;
+  HomeStateless({this.title = "valor inicial", this.valorAltura = 50});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
+        appBar: AppBar(
+          leading: /* Icon(Icons.arrow_back) */ Center(child: Text("leading")),
+          title: Text(
+            "Titulo",
+            style: TextStyle(fontSize: 25, color: Colors.amber),
+          ),
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          /* leadingWidth: 100,
+          toolbarHeight: 100,
+          toolbarOpacity: 0.5, */
+        ),
+
+        //actions: [IconButton(icon: Icon(Icons.search), onPressed: () => ejecutarBusqueda())],
+
+        body: /* Column( */
+            //widget limitado por alto y ancho
+            ListView(
+          scrollDirection: Axis.vertical,
+          //con este widget se puede hacer scroll
+          children: [
+            Container(
+              height: 140,
+              //width: 200,
+              color: Colors.black,
+            ),
+            Container(
+              height: 140,
+              //width: 200,
+              color: Colors.white,
+            ),
+            Container(
+              height: valorAltura,
+              //width: 200,
+              color: Colors.brown,
+            ),
+            Text("texto hijo"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  color: Colors.amberAccent,
+                  height: 50,
+                  width: 50,
+                ),
+                Container(
+                  color: Colors.green,
+                  height: 20,
+                  width: 20,
+                ),
+                Container(
+                  color: Colors.cyan,
+                  height: 50,
+                  width: 50,
+                )
+              ],
+            ),
+            Container(
+              height: 300,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    //color: Colors.amberAccent,
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.amberAccent),
+                  ),
+                  Container(
+                    color: Colors.green,
+                    height: 20,
+                    width: 20,
+                  ),
+                  Container(
+                    color: Colors.cyan,
+                    height: 50,
+                    width: 50,
+                  )
+                ],
+              ),
+            )
+          ],
+        )
+        /* Container(
         child: Center(
             child: Text(title,
                 style: TextStyle(
                     fontSize: 50,
                     color: Colors.red,
                     fontWeight: FontWeight.bold))),
-      ),
-    );
+      ), */
+        );
   }
 }
 
 class HomeStateful extends StatefulWidget {
   //todo lo que este aqui se define una vez, porque es el contructor
   final String title;
-  HomeStateful({this.title = "valor inicial stateful"});
+  final double altura;
+  HomeStateful({this.title = "valor inicial stateful", this.altura = 0});
   @override
   _HomeStatefulState createState() => _HomeStatefulState();
 }
 
 class _HomeStatefulState extends State<HomeStateful> {
   String titleParametro;
+  double valorAltura;
 
   List<Widget> hijos = [];
   List<String> hijosString = [];
@@ -84,6 +179,7 @@ class _HomeStatefulState extends State<HomeStateful> {
     //esto metodo se ejecuta cuando se inicio el widget
     super.initState();
     titleParametro = "valor parametro";
+    this.valorAltura = widget.altura;
     //hijos.add(Text("hola"));
     //hijos.add(Text("hola 2"));
     print(hijos.length);
@@ -116,7 +212,7 @@ class _HomeStatefulState extends State<HomeStateful> {
       floatingActionButton: FloatingActionButton(
         child: Text(hijosString.length.toString()),
         onPressed:
-            () => /* agregarHijos(hijosString.length + 1) */ moverAHijo(),
+            /* agregarHijos(hijosString.length + 1) */ moverAHijo,
       ),
     );
     /* Scaffold(
@@ -164,6 +260,183 @@ class _HijoWidgetState extends State<HijoWidget> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.backpack),
         onPressed: volver,
+      ),
+    );
+  }
+}
+
+class Widgets extends StatefulWidget {
+  @override
+  _WidgetsState createState() => _WidgetsState();
+}
+
+class _WidgetsState extends State<Widgets> {
+  final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final _focusNodeEdad = FocusNode();
+  //double valorAltura;
+  TextEditingController _nombreController;
+  TextEditingController _passwordController;
+  TextEditingController _edadController;
+  TextEditingController _lugarController;
+
+  /* String nombreController;
+  String passwordController; */
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //valorAltura = 50;
+    _nombreController = TextEditingController(text: "alex");
+    _passwordController = TextEditingController();
+    _edadController = TextEditingController(text: "0");
+    _lugarController = TextEditingController();
+    /* nombreController = 'alex';
+    passwordController = ''; */
+
+    _focusNodeEdad.addListener(() {
+      if (_focusNodeEdad.hasFocus) {
+        print("el controlador de edad tiene el foco");
+        if (int.parse(_edadController.text) > 100) {
+          _edadController.text = "0";
+        }
+      } else {
+        print(" el controlador perdio el foco");
+      }
+    });
+  }
+
+  void _subirFormulario() {
+    /* print('nombre : ${_nombreController.text}');
+    print('password : ${_passwordController.text}'); */
+
+    final FormState formularioState = _formKey.currentState;
+
+    if (formularioState.validate()) {
+      formularioState.save();
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          content: Text("formulario correcto")));
+      print("el formulario se subio correctamente");
+    } else {
+      print("el formulario tiene errores");
+    }
+  }
+
+  /* void modificarAltura() {
+    setState(() {
+      if (valorAltura == 50)
+        valorAltura = 100;
+      else {
+        valorAltura = 50;
+      }
+    });
+  } */
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      //top: true,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text("Formulario"),
+          actions: [
+            /* IconButton(icon: Icon(Icons.face), onPressed: modificarAltura) */
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(5),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              //side: BorderSide(color: Colors.black),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            elevation: 20,
+            child: Form(
+                key: _formKey,
+                child: Scrollbar(
+                  hoverThickness: 10,
+                  thickness: 10,
+                  child: ListView(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            labelText: "Nombre",
+                            /* hintText: "nombre hint",
+                          helperText: "texto de ayuda",
+                          helperStyle: TextStyle(color: Colors.red), */
+                            border: OutlineInputBorder(),
+                            /* enabledBorder: OutlineInputBorder() */
+                          ),
+                          controller: _nombreController,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          obscuringCharacter: "*",
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            labelText: "Contrasenia",
+                            /* hintText: "nombre hint",
+                          helperText: "texto de ayuda",
+                          helperStyle: TextStyle(color: Colors.red), */
+                            border: OutlineInputBorder(),
+                            /* enabledBorder: OutlineInputBorder() */
+                          ),
+                          controller: _passwordController,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: TextField(
+                          decoration: InputDecoration(labelText: "edad"),
+                          controller: _edadController,
+                          focusNode: _focusNodeEdad,
+                          keyboardType: TextInputType.number,
+                          //inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^[a-zA-Z0-9]+$'))],
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          //readOnly: true,
+                          /* onChanged: (String valor) {
+                            //va
+                            print("se cambio el valor de edad por :" + valor);
+                          }, */
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: TextFormField(
+                          decoration:
+                              InputDecoration(labelText: "lugar nacimiento"),
+                          controller: _lugarController,
+                          onChanged: (String valor) {
+                            //va
+                            print("se cambio el valor de edad por :" + valor);
+                          },
+                          validator: (valor1) => valor1.length > 10
+                              ? "el valor no es valido"
+                              : null,
+                          onSaved: (valor) {
+                            print('entro al onsaved');
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                )),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.upload_file),
+          onPressed: _subirFormulario,
+        ),
       ),
     );
   }
