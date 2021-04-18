@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_tutorial/pages/detail-page.dart';
+import 'package:flutter_tutorial/pages/list-page.dart';
 
 void main() {
   print('se ejecuto el main');
@@ -11,17 +13,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      //theme: ThemeData.dark(),
-      theme: ThemeData.light(),
-      title: 'Flutter Demo',
-      home: Widgets(),
-    );
+        debugShowCheckedModeBanner: false,
+        //theme: ThemeData.dark(),
+        //theme: ThemeData.light(),
+        title: 'Flutter Demo',
+        //home: HomeStateful(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => ListPage(),
+          '/detalle': (context) => DetailPage(),
+        });
   }
 }
 
 //un stateless widget solo se pinta una vez
-class HomeStateless extends StatelessWidget {
+/* class HomeStateless extends StatelessWidget {
   //todo lo que este aqui se define una vez, porque es el contructor
   final String title;
   final double valorAltura;
@@ -129,7 +135,7 @@ class HomeStateless extends StatelessWidget {
       ), */
         );
   }
-}
+} */
 
 class HomeStateful extends StatefulWidget {
   //todo lo que este aqui se define una vez, porque es el contructor
@@ -141,8 +147,8 @@ class HomeStateful extends StatefulWidget {
 }
 
 class _HomeStatefulState extends State<HomeStateful> {
-  String titleParametro;
-  double valorAltura;
+  String titleParametro = '';
+  double valorAltura = 0;
 
   List<Widget> hijos = [];
   List<String> hijosString = [];
@@ -265,6 +271,29 @@ class _HijoWidgetState extends State<HijoWidget> {
   }
 }
 
+class NietoWidget extends StatefulWidget {
+  @override
+  _NietoWidgetState createState() => _NietoWidgetState();
+}
+
+class _NietoWidgetState extends State<NietoWidget> {
+  void volver() {
+    Navigator.pop(context, "volver al padre");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: MaterialButton(
+          child: Text("REGRESAR AL NODO RAIZ"),
+          onPressed: volver,
+        ),
+      ),
+    );
+  }
+}
+/* 
 class Widgets extends StatefulWidget {
   @override
   _WidgetsState createState() => _WidgetsState();
@@ -441,3 +470,4 @@ class _WidgetsState extends State<Widgets> {
     );
   }
 }
+ */
