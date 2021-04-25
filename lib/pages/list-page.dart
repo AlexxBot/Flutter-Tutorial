@@ -10,7 +10,8 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   late final List<Numero> lista;
   late List<Numero> listaBusqueda;
-  final TextEditingController input = TextEditingController(text: '');
+  late final TextEditingController input;
+  late final FocusNode focusInput;
 
   @override
   void initState() {
@@ -36,6 +37,16 @@ class _ListPageState extends State<ListPage> {
     ];
 
     listaBusqueda = lista;
+
+    input = TextEditingController(text: "");
+    focusInput = FocusNode();
+
+    focusInput.addListener(() {
+      if (!focusInput.hasFocus) {
+        print("no esta en el foco");
+        buscar();
+      }
+    });
   }
 
   void irDetalle() {
@@ -47,6 +58,14 @@ class _ListPageState extends State<ListPage> {
     setState(() {
       listaBusqueda = lista
           .where((elemento) => elemento.numeroLetras.indexOf(input.text) >= 0)
+          .toList();
+    });
+  }
+
+  void buscarSinControlador(String valor) {
+    setState(() {
+      listaBusqueda = lista
+          .where((elemento) => elemento.numeroLetras.indexOf(valor) >= 0)
           .toList();
     });
   }
@@ -82,9 +101,15 @@ class _ListPageState extends State<ListPage> {
                     style: TextStyle(
                       fontSize: 30,
                     ),
-                    controller: input,
+                    //controller: input,
+                    //focusNode: focusInput,
+                    onChanged: (String valor) {
+                      //buscar();
+                      buscarSinControlador(valor);
+                      //dprint(' se cambio el texto del imput');
+                    },
                   ),
-                  IconButton(icon: Icon(Icons.search), onPressed: buscar)
+                  /* IconButton(icon: Icon(Icons.search), onPressed: buscar) */
                   /* GestureDetector(
                     child: Icon(Icons.search),
                     onTap: buscar,

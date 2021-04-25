@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_tutorial/pages/cats/catList-page.dart';
 import 'package:flutter_tutorial/pages/detail-page.dart';
 import 'package:flutter_tutorial/pages/list-page.dart';
 
@@ -18,10 +19,11 @@ class MyApp extends StatelessWidget {
         //theme: ThemeData.light(),
         title: 'Flutter Demo',
         //home: HomeStateful(),
-        initialRoute: '/',
+        initialRoute: '/cats',
         routes: {
           '/': (context) => ListPage(),
           '/detalle': (context) => DetailPage(),
+          '/cats': (context) => CatListPage(),
         });
   }
 }
