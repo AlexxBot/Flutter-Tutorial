@@ -11,32 +11,52 @@ class _CatListPageState extends State<CatListPage> {
   List<Raza> razaGatos = [];
   final razaService = RazaService();
 
-  //late Future<List<Raza>> razaGatosFuture;
+  //String? cadenaNula; //puede ser nulo
+  //String cadenaNoNula = "algo";
+
+  late Future<List<Raza>> razaGatosFuture;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    razaService.getBreads().then((lista) => setState(() => razaGatos = lista));
+    /* print("antes de llamar a la funcion");
+    //es asincrono
+    razaService.getBreads().then((lista) => setState(() {
+          razaGatos = lista;// se asigna cuando la respuesta ya se obtuvo
+          print("se asigno la lista");
+        }));
+    print("despues de llamar la funcion"); */
     //
-    //razaGatosFuture = razaService.getBreads();
+    razaGatosFuture = razaService.getBreads();
+    //par conevertir de una valor posiblemente nulo a uno nu nulo
+    //
+    //cadenaNula = "nuevo valor";
+    //cadenaNoNula = cadenaNula!;
+    //print(cadenaNoNula);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Razas de Gatos"),
-        actions: [],
-      ),
-      body:
-          /* FutureBuilder<List<Raza>>(
-          future: razaGatosFuture,
-          builder: (context, AsyncSnapshot<List<Raza>> snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  itemBuilder: (context, index) {
-                    return Container(
+  Widget syncBody() {
+    return Scrollbar(
+      thickness: 10,
+      isAlwaysShown: true,
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: GridView.builder(
+            scrollDirection: Axis.vertical,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 200,
+              childAspectRatio: 1 / 1,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: razaGatos.length,
+            itemBuilder: (context, index) {
+              return Card(
+                  elevation: 10,
+                  //color: index % 2 == 0 ? Colors.green : Colors.blue,
+                  child: Stack(children: [
+                    Container(
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 fit: BoxFit.fill,
@@ -44,22 +64,67 @@ class _CatListPageState extends State<CatListPage> {
                                     Colors.black.withOpacity(0.8),
                                     BlendMode.dstATop),
                                 image: NetworkImage(
-                                  snapshot.data?[index].imagen.url,
-                                ))));
-                  },
-                  itemCount: snapshot.data?.length);
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          },
-        ) */
+                                  razaGatos[index].imagen.url,
+                                )))),
+                    /* Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Image.network(
+                          razaGatos[index].imagen.url,
+                          fit: BoxFit.fill,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            }
+                            return Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        loadingProgress.expectedTotalBytes!
+                                    : null,
+                              ),
+                            );
+                          },
+                        ),
+                      ), */
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Text(
+                        razaGatos[index].nombre,
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ]));
+            }),
+      ),
+    );
+  }
 
-          Scrollbar(
-        thickness: 10,
-        isAlwaysShown: true,
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: GridView.builder(
+  Widget asyncBody() {
+    return FutureBuilder<List<Raza>>(
+      future: razaGatosFuture,
+      builder: (context, AsyncSnapshot<List<Raza>> snapshot) {
+        if (snapshot.hasData) {
+          /* return ListView.builder(
+              itemBuilder: (context, index) {
+                /* return Text(snapshot.data![index].imagen.url); */
+                return Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.8),
+                                BlendMode.dstATop),
+                            image: NetworkImage(snapshot.data![index].imagen.url
+                                /* snapshot.data![index].imagen.url, */
+                                ))));
+              },
+              itemCount: snapshot.data!.length); */
+          return GridView.builder(
               scrollDirection: Axis.vertical,
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 200,
@@ -67,7 +132,7 @@ class _CatListPageState extends State<CatListPage> {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
-              itemCount: razaGatos.length,
+              itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 return Card(
                     elevation: 10,
@@ -81,7 +146,7 @@ class _CatListPageState extends State<CatListPage> {
                                       Colors.black.withOpacity(0.8),
                                       BlendMode.dstATop),
                                   image: NetworkImage(
-                                    razaGatos[index].imagen.url,
+                                    snapshot.data![index].imagen.url,
                                   )))),
                       /* Padding(
                         padding: EdgeInsets.only(bottom: 20),
@@ -108,15 +173,31 @@ class _CatListPageState extends State<CatListPage> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Text(
-                          razaGatos[index].nombre,
+                          snapshot.data![index].nombre,
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ]));
-              }),
-        ),
-      ),
+              });
+        } else {
+          return Center(
+              child:
+                  CircularProgressIndicator() /* Text(
+                  "los datos estan cargando") */
+              );
+        }
+      },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Razas de Gatos"),
+          actions: [],
+        ),
+        body: asyncBody() /* syncBody() */);
   }
 }

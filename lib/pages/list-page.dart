@@ -13,6 +13,8 @@ class _ListPageState extends State<ListPage> {
   late final TextEditingController input;
   late final FocusNode focusInput;
 
+  bool mostrarBusqueda = true;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -42,10 +44,15 @@ class _ListPageState extends State<ListPage> {
     focusInput = FocusNode();
 
     focusInput.addListener(() {
-      if (!focusInput.hasFocus) {
+      /* if (!focusInput.hasFocus) {
         print("no esta en el foco");
         buscar();
-      }
+      } */
+      /* if (focusInput.hasFocus) {
+        if (input.text.trim() == "") {
+          mostrarBusqueda = true;
+        }
+      } */
     });
   }
 
@@ -63,11 +70,11 @@ class _ListPageState extends State<ListPage> {
   }
 
   void buscarSinControlador(String valor) {
-    setState(() {
-      listaBusqueda = lista
-          .where((elemento) => elemento.numeroLetras.indexOf(valor) >= 0)
-          .toList();
-    });
+    /* setState(() { */
+    listaBusqueda = lista
+        .where((elemento) => elemento.numeroLetras.indexOf(valor) >= 0)
+        .toList();
+    /* }); */
   }
 
   @override
@@ -101,15 +108,33 @@ class _ListPageState extends State<ListPage> {
                     style: TextStyle(
                       fontSize: 30,
                     ),
-                    //controller: input,
+                    controller: input,
                     //focusNode: focusInput,
                     onChanged: (String valor) {
                       //buscar();
-                      buscarSinControlador(valor);
-                      //dprint(' se cambio el texto del imput');
+                      setState(() {
+                        buscarSinControlador(valor);
+                        //dprint(' se cambio el texto del imput');
+                        if (valor.trim() != "") {
+                          mostrarBusqueda = false;
+                        } else {
+                          mostrarBusqueda = true;
+                        }
+                      });
                     },
                   ),
-                  /* IconButton(icon: Icon(Icons.search), onPressed: buscar) */
+                  mostrarBusqueda
+                      ? IconButton(icon: Icon(Icons.search), onPressed: buscar)
+                      : IconButton(
+                          icon: Icon(Icons.clear),
+                          onPressed: () {
+                            input.clear();
+                            setState(() {
+                              buscarSinControlador("");
+                              mostrarBusqueda = true;
+                            });
+                          })
+
                   /* GestureDetector(
                     child: Icon(Icons.search),
                     onTap: buscar,

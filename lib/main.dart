@@ -14,17 +14,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        //theme: ThemeData.dark(),
-        //theme: ThemeData.light(),
-        title: 'Flutter Demo',
-        //home: HomeStateful(),
-        initialRoute: '/cats',
+      debugShowCheckedModeBanner: false,
+      //theme: ThemeData.dark(),
+      //theme: ThemeData.light(),
+      title: 'Flutter Demo',
+      home: HomeStateful(),
+      /* initialRoute: '/cats',
         routes: {
           '/': (context) => ListPage(),
           '/detalle': (context) => DetailPage(),
           '/cats': (context) => CatListPage(),
-        });
+        } */
+    );
   }
 }
 
