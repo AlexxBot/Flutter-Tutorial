@@ -4,12 +4,12 @@ import 'package:flutter_tutorial/widgets/numero-widget.dart';
 import 'package:flutter_tutorial/widgets/resultado-widget.dart';
 import 'package:provider/provider.dart';
 
-class CalculadoraPage extends StatefulWidget {
+class CalculadoraBlocPage extends StatefulWidget {
   @override
-  _CalculadoraPageState createState() => _CalculadoraPageState();
+  _CalculadoraBlocPageState createState() => _CalculadoraBlocPageState();
 }
 
-class _CalculadoraPageState extends State<CalculadoraPage> {
+class _CalculadoraBlocPageState extends State<CalculadoraBlocPage> {
   //late TextEditingController resultado;
   @override
   void initState() {

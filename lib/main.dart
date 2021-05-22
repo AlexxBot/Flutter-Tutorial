@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tutorial/bloc/calculadora_bloc/calculadora_bloc.dart';
+import 'package:flutter_tutorial/models/raza.dart';
+import 'package:flutter_tutorial/pages/calculadora-bloc-page.dart';
 import 'package:flutter_tutorial/pages/calculadora-page.dart';
 import 'package:flutter_tutorial/pages/cats/catList-page.dart';
 import 'package:flutter_tutorial/pages/detail-page.dart';
 import 'package:flutter_tutorial/pages/list-page.dart';
 import 'package:flutter_tutorial/provider/calculadora-provider.dart';
+import 'package:flutter_tutorial/services/raza-service.dart';
 import 'package:provider/provider.dart';
+
+import 'bloc/cat_bloc/cat_bloc.dart';
 
 void main() {
   print('se ejecuto el main');
@@ -26,13 +33,20 @@ class MyApp extends StatelessWidget {
         ),
         title: 'Flutter Demo',
         //home: HomeStateful(),
-        initialRoute: '/calculadora',
+        initialRoute: '/cats',
         routes: {
           '/': (context) => ListPage(),
           '/detalle': (context) => DetailPage(),
-          '/cats': (context) => CatListPage(),
+          '/cats': (context) => BlocProvider(
+                create: (_) => CatBloc(razaService: RazaService()),
+                child: CatListPage(),
+              ),
           '/calculadora': (context) => ChangeNotifierProvider(
               create: (_) => CalculadoraProvider(), child: CalculadoraPage()),
+          '/calculadoraBloc': (context) => BlocProvider(
+                create: (_) => CalculadoraBloc(),
+                child: CalculadoraBlocPage(),
+              )
         });
   }
 }

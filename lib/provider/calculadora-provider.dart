@@ -15,14 +15,11 @@ class CalculadoraProvider extends ChangeNotifier {
   operar() {
     if (operador == Operador.Sumar) {
       resultado = double.parse(numero1) + double.parse(numero2);
-    }
-    if (operador == Operador.Restar) {
+    } else if (operador == Operador.Restar) {
       resultado = double.parse(numero1) - double.parse(numero2);
-    }
-    if (operador == Operador.Multiplicar) {
+    } else if (operador == Operador.Multiplicar) {
       resultado = double.parse(numero1) * double.parse(numero2);
-    }
-    if (operador == Operador.Dividir) {
+    } else if (operador == Operador.Dividir) {
       resultado = double.parse(numero1) / double.parse(numero2);
     }
     notifyListeners();
