@@ -6,8 +6,10 @@ import 'package:flutter_tutorial/models/raza.dart';
 import 'package:flutter_tutorial/pages/calculadora-bloc-page.dart';
 import 'package:flutter_tutorial/pages/calculadora-page.dart';
 import 'package:flutter_tutorial/pages/cats/catList-page.dart';
+import 'package:flutter_tutorial/pages/counterPage.dart';
 import 'package:flutter_tutorial/pages/detail-page.dart';
 import 'package:flutter_tutorial/pages/list-page.dart';
+import 'package:flutter_tutorial/pages/loginPage.dart';
 import 'package:flutter_tutorial/provider/calculadora-provider.dart';
 import 'package:flutter_tutorial/services/raza-service.dart';
 import 'package:provider/provider.dart';
@@ -33,9 +35,10 @@ class MyApp extends StatelessWidget {
         ),
         title: 'Flutter Demo',
         //home: HomeStateful(),
-        initialRoute: '/cats',
+        initialRoute: '/',
         routes: {
-          '/': (context) => ListPage(),
+          '/': (context) => LoginPage(),
+          '/listPage': (context) => ListPage(),
           '/detalle': (context) => DetailPage(),
           '/cats': (context) => BlocProvider(
                 create: (_) => CatBloc(razaService: RazaService()),
@@ -46,7 +49,8 @@ class MyApp extends StatelessWidget {
           '/calculadoraBloc': (context) => BlocProvider(
                 create: (_) => CalculadoraBloc(),
                 child: CalculadoraBlocPage(),
-              )
+              ),
+          '/counter': (context) => CounterPage()
         });
   }
 }
