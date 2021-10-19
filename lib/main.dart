@@ -8,6 +8,7 @@ import 'package:flutter_tutorial/pages/calculadora-page.dart';
 import 'package:flutter_tutorial/pages/cats/catList-page.dart';
 import 'package:flutter_tutorial/pages/counterPage.dart';
 import 'package:flutter_tutorial/pages/detail-page.dart';
+import 'package:flutter_tutorial/pages/keys/key-page.dart';
 import 'package:flutter_tutorial/pages/list-page.dart';
 import 'package:flutter_tutorial/pages/loginPage.dart';
 import 'package:flutter_tutorial/provider/calculadora-provider.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         ),
         title: 'Flutter Demo',
         //home: HomeStateful(),
-        initialRoute: '/',
+        initialRoute: '/keyPage',
         routes: {
           '/': (context) => LoginPage(),
           '/listPage': (context) => ListPage(),
@@ -50,7 +51,8 @@ class MyApp extends StatelessWidget {
                 create: (_) => CalculadoraBloc(),
                 child: CalculadoraBlocPage(),
               ),
-          '/counter': (context) => CounterPage()
+          '/counter': (context) => CounterPage(),
+          '/keyPage': (_) => KeyPage()
         });
   }
 }
@@ -246,8 +248,7 @@ class _HomeStatefulState extends State<HomeStateful> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       floatingActionButton: FloatingActionButton(
         child: Text(hijosString.length.toString()),
-        onPressed:
-            /* agregarHijos(hijosString.length + 1) */ moverAHijo,
+        onPressed: /* agregarHijos(hijosString.length + 1) */ moverAHijo,
       ),
     );
     /* Scaffold(
