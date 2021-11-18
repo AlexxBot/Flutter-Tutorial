@@ -9,6 +9,7 @@ import 'package:flutter_tutorial/pages/cats/catList-page.dart';
 import 'package:flutter_tutorial/pages/counterPage.dart';
 import 'package:flutter_tutorial/pages/detail-page.dart';
 import 'package:flutter_tutorial/pages/keys/key-page.dart';
+import 'package:flutter_tutorial/pages/keys/key_selector_page.dart';
 import 'package:flutter_tutorial/pages/list-page.dart';
 import 'package:flutter_tutorial/pages/loginPage.dart';
 import 'package:flutter_tutorial/provider/calculadora-provider.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         ),
         title: 'Flutter Demo',
         //home: HomeStateful(),
-        initialRoute: '/keyPage',
+        initialRoute: '/keySelectorPage',
         routes: {
           '/': (context) => LoginPage(),
           '/listPage': (context) => ListPage(),
@@ -52,7 +53,8 @@ class MyApp extends StatelessWidget {
                 child: CalculadoraBlocPage(),
               ),
           '/counter': (context) => CounterPage(),
-          '/keyPage': (_) => KeyPage()
+          '/keyPage': (_) => KeyPage(),
+          '/keySelectorPage': (_) => KeySelectorPage()
         });
   }
 }
